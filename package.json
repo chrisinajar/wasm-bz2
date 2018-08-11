@@ -1,6 +1,6 @@
 {
   "name": "wasm-bz2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "bzip2 methods compiled to webassembly",
   "main": "index.js",
   "scripts": {
