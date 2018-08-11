@@ -59,3 +59,6 @@ typings/
 
 # next.js build output
 .next
+*.o
+.DS_Store
+sample*.test
