@@ -11,6 +11,9 @@ extern "C" {
 #define true 1
 #define false 0
 
+// uncomment to enable debug messages....
+// #define PRINT_DEBUG 0
+
 void (*fnPtr)(void*, int, char) = 0;
 
 void EMSCRIPTEN_KEEPALIVE registerCallback (int ptr) {
@@ -37,26 +40,39 @@ int EMSCRIPTEN_KEEPALIVE decompress(bz_stream* strm, void* inBuff, int avail_in,
 
   int res = BZ2_bzDecompress(strm);
   char done = false;
+  #ifdef PRINT_DEBUG
+    printf("chunk completed %d %d\n", avail_in - strm->avail_in, avail_out - strm->avail_out);
+  #endif
 
   switch (res) {
     case BZ_PARAM_ERROR:
-      // printf("Parameter error for decompress\n");
+      #ifdef PRINT_DEBUG
+        printf("Parameter error for decompress\n");
+      #endif
       done = true;
       break;
     case BZ_DATA_ERROR:
-      // printf("a data integrity error is detected in the compressed stream\n");
+      #ifdef PRINT_DEBUG
+        printf("a data integrity error is detected in the compressed stream\n");
+      #endif
       done = true;
       break;
     case BZ_DATA_ERROR_MAGIC:
-      // printf("the compressed stream doesn't begin with the right magic bytes\n");
+      #ifdef PRINT_DEBUG
+        printf("the compressed stream doesn't begin with the right magic bytes\n");
+      #endif
       done = true;
       break;
     case BZ_MEM_ERROR:
-      // printf("there wasn't enough memory available\n");
+      #ifdef PRINT_DEBUG
+        printf("there wasn't enough memory available\n");
+      #endif
       done = true;
       break;
     case BZ_STREAM_END:
-      // printf("the logical end of the data stream was detected and all output in has been consumed\n");
+      #ifdef PRINT_DEBUG
+        printf("the logical end of the data stream was detected and all output in has been consumed\n");
+      #endif
       done = true;
       break;
     case BZ_OK:
@@ -78,7 +94,9 @@ int EMSCRIPTEN_KEEPALIVE decompress(bz_stream* strm, void* inBuff, int avail_in,
 }
 
 int EMSCRIPTEN_KEEPALIVE finish(bz_stream* strm) {
-  // printf("Cleaning up memory\n");
+  #ifdef PRINT_DEBUG
+    printf("Cleaning up memory\n");
+  #endif
   int res = BZ2_bzDecompressEnd(strm);
 
   free(strm);

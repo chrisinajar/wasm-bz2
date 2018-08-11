@@ -4,8 +4,8 @@ const { partial } = require('ap');
 
 var instance = null;
 var fnPtr = null;
-var inBuffSize = 256 * 256;
-var outBuffSize = inBuffSize * 2;
+var inBuffSize = 1024 * 1024;
+var outBuffSize = inBuffSize * 32;
 
 const DataEvent = Event();
 
@@ -35,6 +35,9 @@ function sendNextChunk (ref, chunk) {
 
     // console.log('Working on this chunk...', ref.currentBuffer.byteLength);
     ref.isFinished = !!instance._decompress(ref.ref, ref.inBuff, inSize, ref.outBuff, outBuffSize);
+    if (ref.isFinished) {
+      // console.log('FINISHED');
+    }
     if (inSize === ref.currentBuffer.byteLength) {
       ref.currentBuffer = null;
     } else {
@@ -87,6 +90,7 @@ function callback (refNum, size, done) {
   }
   if (done) {
     ref.isFinished = !!done;
+    // console.log('FINISHED');
   }
 }
 

@@ -14,18 +14,20 @@ function Stream () {
     var ref = await init();
 
     BZ2.sendNextChunk(ref, chunk);
-    var resultBuff = Buffer.concat(results);
+    results.forEach(this.push.bind(this));
+    // console.log('Transforming!', chunk.byteLength, resultBuff.byteLength);
     results = [];
-    cb(null, resultBuff);
+    cb();
   }
 
   async function flush (cb) {
     var ref = await init();
     BZ2.flush(ref);
     BZ2.finish(ref);
-    var resultBuff = Buffer.concat(results);
+    results.forEach(this.push.bind(this));
+    // console.log('Flushing!', resultBuff.byteLength);
     results = [];
-    cb(null, resultBuff);
+    cb();
   }
 
   async function init () {
