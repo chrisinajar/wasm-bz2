@@ -58,7 +58,7 @@ async function init () {
     return { instance };
   }
   return new Promise(function (resolve, reject) {
-    instance = Module({
+    const moduleInstance = Module({
       onRuntimeInitialized: onInit
       // memory growth is enabled, so whatever...
       // TOTAL_MEMORY: 1024 * 1024 * 1024
@@ -67,14 +67,13 @@ async function init () {
     function onInit () {
       // console.log('onRuntimeInitialized');
       // should print garbage
-      fnPtr = instance.addFunction(callback, 'viii');
+      fnPtr = moduleInstance.addFunction(callback, 'viii');
       // console.log('Registered a function', fnPtr);
 
-      instance._registerCallback(fnPtr);
+      moduleInstance._registerCallback(fnPtr);
 
+      instance = moduleInstance;
       resolve({ instance });
-
-      // console.log('Resolved');
     }
   });
 }

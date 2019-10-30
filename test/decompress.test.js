@@ -1,9 +1,10 @@
 const test = require('tape');
 const fs = require('fs');
-const BZ2 = require('./index');
-const BZ2Stream = require('./stream');
+const path = require('path');
+const BZ2 = require('../index');
+const BZ2Stream = require('../stream');
 
-var sample1Buff = fs.readFileSync('./sample1.bz2');
+var sample1Buff = fs.readFileSync(path.join(__dirname, '../sample1.bz2'));
 
 test('can decompress basic file', async function (t) {
   // delete the output file first...

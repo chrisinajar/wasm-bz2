@@ -4,7 +4,7 @@
   "description": "bzip2 methods compiled to webassembly",
   "main": "index.js",
   "scripts": {
-    "test": "tape test.js | tap-spec && semistandard ./*.js --fix",
+    "test": "tape test/*.test.js | tap-spec && semistandard ./*.js --fix",
     "tape": "tape",
     "tap-spec": "tap-spec",
     "semistandard": "semistandard"
