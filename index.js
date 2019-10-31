@@ -2,6 +2,7 @@ const Module = require('./libbz2/bzip2');
 const Event = require('weakmap-event');
 const { partial } = require('ap');
 
+var initPromise = null;
 var instance = null;
 var fnPtr = null;
 var inBuffSize = 1024 * 1024;
@@ -54,10 +55,10 @@ function flush (ref) {
 }
 
 async function init () {
-  if (instance) {
-    return { instance };
+  if (initPromise) {
+    return initPromise;
   }
-  return new Promise(function (resolve, reject) {
+  initPromise = new Promise(function (resolve, reject) {
     const moduleInstance = Module({
       onRuntimeInitialized: onInit
       // memory growth is enabled, so whatever...
@@ -76,6 +77,8 @@ async function init () {
       resolve({ instance });
     }
   });
+
+  return initPromise;
 }
 
 function callback (refNum, size, done) {
